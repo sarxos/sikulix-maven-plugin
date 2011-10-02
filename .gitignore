@@ -1,0 +1,6 @@
+record-test-execution/target
+record-test-execution/.settings
+sikuli-maven-plugin-prerequisites/target
+sikuli-maven-plugin-prerequisites/.settings
+sikulix-maven-plugin/target
+sikulix-maven-plugin/.settings

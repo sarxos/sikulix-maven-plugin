@@ -1,0 +1,83 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.sarxos.testing</groupId>
+	<artifactId>record-test-execution</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Record Test Execution</name>
+	<description>Is recording of test execution possible?</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.2</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+	
+		<!-- this is some nasty w/a for lifecycle issues in Eclipse Indigo M2E -->
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>com.sarxos.testing</groupId>
+										<artifactId>sikulix-maven-plugin</artifactId>
+										<versionRange>[0.0.1-SNAPSHOT,)</versionRange>
+										<goals>
+											<goal>package</goal>
+											<goal>run</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<execute />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+		<plugins>
+
+			<plugin>
+				<groupId>com.sarxos.testing</groupId>
+				<artifactId>sikulix-maven-plugin</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+				<executions>
+					<execution>
+						<id>package-sikulix-scripts</id>
+						<goals>
+							<goal>package</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>run-packaged-scripts</id>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+
+			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-surefire-plugin</artifactId> 
+				<version>2.10</version> <configuration> <properties> <property> <name>listener</name> 
+				<value>com.sarxos.testing.ExecutionRecordingListener</value> </property> 
+				</properties> </configuration> </plugin> -->
+		</plugins>
+
+	</build>
+
+</project>
