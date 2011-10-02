@@ -23,7 +23,8 @@ import org.sikuli.script.ScriptRunner;
 
 
 /**
- * Goal which touches a timestamp file.
+ * This MOJO executes Sikuli X scripts from src/test/sikulix directory and
+ * record all the actions as movie.
  * 
  * @goal run
  * @phase test
@@ -32,7 +33,7 @@ import org.sikuli.script.ScriptRunner;
 public class SikuliXExecutionMojo extends AbstractMojo implements ScreenRecorderListener {
 
 	/**
-	 * Location of the file.
+	 * Target directory.
 	 * 
 	 * @parameter expression="${project.build.directory}"
 	 * @required
@@ -121,6 +122,13 @@ public class SikuliXExecutionMojo extends AbstractMojo implements ScreenRecorder
 		}
 	}
 
+	/**
+	 * Unzip *.skl file.
+	 * 
+	 * @param file
+	 * @param directory
+	 * @throws MojoExecutionException
+	 */
 	private void unzip(File file, File directory) throws MojoExecutionException {
 
 		try {
