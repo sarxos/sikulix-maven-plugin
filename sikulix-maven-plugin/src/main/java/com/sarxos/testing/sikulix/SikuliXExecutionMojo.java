@@ -176,27 +176,6 @@ public class SikuliXExecutionMojo extends AbstractMojo implements ScreenRecorder
 	}
 
 	public static void main(String[] args) throws Exception {
-
-		ScreenRecorderListener srl = new ScreenRecorderListener() {
-
-			int i = 0;
-			public void recordingStopped() {
-				System.out.println("stop " + i);
-			}
-
-			public void frameRecorded(boolean fullFrame) throws IOException {
-				System.out.println("frame recorded " + i++);
-			}
-		};
-
-		FileOutputStream fos = new FileOutputStream("bubu.kk");
-		DesktopScreenRecorder recorder = new DesktopScreenRecorder(fos, srl);
-		recorder.startRecording();
-
-		Thread.sleep(10000);
-
-		recorder.stopRecording();
-
 		RecordingConverter converter = new RecordingConverter();
 		converter.process("bubu.kk", "bubu.mov", -1, -1);
 	}
