@@ -38,6 +38,16 @@
 			<artifactId>sikuli-script</artifactId>
 			<version>1.0rc3</version>
 		</dependency>
+		<dependency>
+			<groupId>one.stone.soup</groupId>
+			<artifactId>screen-recorder</artifactId>
+			<version>r2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>one.stone.soup</groupId>
+			<artifactId>recording-converter</artifactId>
+			<version>r1.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>

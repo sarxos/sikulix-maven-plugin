@@ -21,6 +21,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -28,8 +29,12 @@ import java.io.StringWriter;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.one.stone.soup.screen.recorder.DesktopScreenRecorder;
+import org.one.stone.soup.screen.recorder.ScreenRecorderListener;
+import org.one.stone.soup.screen.recording.converter.RecordingConverter;
 import org.sikuli.script.ScriptRunner;
 
 
@@ -40,7 +45,7 @@ import org.sikuli.script.ScriptRunner;
  * @phase test
  * @author Bartosz Firyn (SarXos)
  */
-public class SikuliXExecutionMojo extends AbstractMojo {
+public class SikuliXExecutionMojo extends AbstractMojo implements ScreenRecorderListener {
 
 	/**
 	 * Location of the file.
@@ -88,6 +93,27 @@ public class SikuliXExecutionMojo extends AbstractMojo {
 
 			unzip(file, sikuli);
 
+			File recording = new File(temp.getPath() + "/" + name + ".rec");
+			if (!recording.exists()) {
+				try {
+					FileUtils.touch(recording);
+				} catch (IOException e) {
+					throw new MojoExecutionException("Cannot create file " + recording, e);
+				}
+			}
+
+			FileOutputStream fos = null;
+			try {
+				fos = new FileOutputStream(recording);
+			} catch (FileNotFoundException e) {
+				throw new MojoExecutionException("File does not exists " + recording, e);
+			}
+
+			DesktopScreenRecorder recorder = new DesktopScreenRecorder(fos, this);
+			recorder.startRecording();
+
+			getLog().info("Recording started " + recording);
+
 			try {
 				runner.runPython(sikuli.getPath());
 			} catch (Exception e) {
@@ -97,6 +123,16 @@ public class SikuliXExecutionMojo extends AbstractMojo {
 				e.printStackTrace(pw);
 				getLog().error(sw.getBuffer().toString());
 				throw new MojoExecutionException("Cannot execute Sikuli X script", e);
+			}
+
+			recorder.stopRecording();
+
+			getLog().info("Recording stopped");
+
+			try {
+				fos.close();
+			} catch (IOException e) {
+				throw new MojoExecutionException("Cannot close stream", e);
 			}
 		}
 	}
@@ -139,8 +175,37 @@ public class SikuliXExecutionMojo extends AbstractMojo {
 		}
 	}
 
-	public static void main(String[] args) throws IOException {
-		ScriptRunner runner = new ScriptRunner(null);
-		runner.runPython("d:/usr/workspace/record-test-execution/src/test/sikulix/start.sikuli");
+	public static void main(String[] args) throws Exception {
+
+		ScreenRecorderListener srl = new ScreenRecorderListener() {
+
+			int i = 0;
+			public void recordingStopped() {
+				System.out.println("stop " + i);
+			}
+
+			public void frameRecorded(boolean fullFrame) throws IOException {
+				System.out.println("frame recorded " + i++);
+			}
+		};
+
+		FileOutputStream fos = new FileOutputStream("bubu.kk");
+		DesktopScreenRecorder recorder = new DesktopScreenRecorder(fos, srl);
+		recorder.startRecording();
+
+		Thread.sleep(10000);
+
+		recorder.stopRecording();
+
+		RecordingConverter converter = new RecordingConverter();
+		converter.process("bubu.kk", "bubu.mov", -1, -1);
+	}
+
+	public void frameRecorded(boolean fullFrame) throws IOException {
+		// do nothing
+	}
+
+	public void recordingStopped() {
+		// do nothing
 	}
 }
