@@ -17,7 +17,7 @@
 	</dependencies>
 
 	<build>
-	
+
 		<!-- this is some nasty w/a for lifecycle issues in Eclipse Indigo M2E -->
 		<pluginManagement>
 			<plugins>
@@ -52,6 +52,16 @@
 		<plugins>
 
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
 				<groupId>com.sarxos.testing</groupId>
 				<artifactId>sikulix-maven-plugin</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
@@ -71,11 +81,22 @@
 				</executions>
 			</plugin>
 
-
-			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-surefire-plugin</artifactId> 
-				<version>2.10</version> <configuration> <properties> <property> <name>listener</name> 
-				<value>com.sarxos.testing.ExecutionRecordingListener</value> </property> 
-				</properties> </configuration> </plugin> -->
+			<!-- 
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.10</version>
+				<configuration>
+					<properties>
+						<property>
+							<name>listener</name>
+							<value>com.sarxos.testing.ExecutionRecordingListener</value>
+						</property>
+					</properties>
+				</configuration>
+			</plugin>
+			-->
+			
 		</plugins>
 
 	</build>
